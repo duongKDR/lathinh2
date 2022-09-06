@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="sty.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+</head>
+
+<body onload="init()">
+
+  <header class="w3-container w3-teal " style=" text-align: center;">
+    <h1>Lật Hình Online </h1>
+    <h3><span id="Timer"></span> </h3>
+  </header>
+  <div class="w3-container flex-container game-container">
+    <div class="main">
+      <span>23</span>
+      <div class="  w3-row " id="tags">
+        
+      </div>
+    </div>
+  </div>
+
+
+  <div id="loss" class="overlay-text">
+    <div class="w3-display-middle">Bạn đã thua ấn để chơi lại <button onclick="a()"> choi lai</button></div>
+
+  </div>
+
+  <div id="win" class="overlay-text">
+
+    <div class="w3-display-middle">Bạn đã thắng ấn để chơi lại <button class="w3-col m3"> choi lai</button></div>
+  </div>
+  </div>
+
+
+
+  <script src="js/scbody.js"></script>
+  <script src="js/script.js"> </script>
+</body>
+
+</html>
