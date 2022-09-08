@@ -28,6 +28,7 @@ function startTimer(duration, display) {
             timer=0;
 
          showLoss();
+         
        
 
         }

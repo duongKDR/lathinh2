@@ -1,33 +1,44 @@
 //xáo thẻ bài
-var block, data, the, memoArry, arry, imgAll, shuffledBlocks, click;
-var countM, match, match2, flipArr;
+let the;
+let memoryCard = [];
+let igNore = [];
 var flipCounter,
   timer,
   gameOn = false;
 var counterClick = 0;
-const a = () => {
-  const loss = document.getElementById("loss");
-  console.log(
-    "🚀 ~ file: script.js ~ line 12 ~ overlay.addEventListener ~ loss",
-    loss
-  );
-
-  if (loss) {
-    loss.classList.remove("visible");
-  }
-  resetGame();
-  init();
-};
-
-const box = Array.from(document.getElementsByClassName("box-1-2"));
-
+let clickIndex=-1;
+let totalOpeningCard = [];
+let checkDuplicate = [];
+let CONDITIONWINING = 4;
+let winning = false;
 
 function resetGame() {
-  var elements = document.getElementsByClassName("w3-col m3");
+  igNore=[];
+  var elements = document.getElementsByClassName("card");
   while (elements.length > 0) {
     elements[0].parentNode.removeChild(elements[0]);
   }
 }
+const b = () => {
+  totalOpeningCard = [];
+  const loss = document.getElementById("loss")
+  const win = document.getElementById("win");
+  if (loss) {
+    loss.classList.remove("visible");
+  }
+  if (winning) {
+    win.classList.remove("visible");
+  }
+
+  resetGame();
+  init();
+};
+
+
+var skillCard = [];
+
+
+
 function showCountdown() {
   return setInterval(() => {
     this.timeRemaining--;
@@ -36,17 +47,31 @@ function showCountdown() {
   }, 1000);
 }
 
+function showLoss() {
+  const loss = document.getElementById("loss");
+  gameOn = false;
+  if (loss) {
+    document.getElementById("loss").classList.add("visible");
+  }
+
+  clearInterval(countdown);
+}
+
+function showWin() {
+  const win = document.getElementById("win");
+  gameOn = false;
+  if (win) {
+    document.getElementById("win").classList.add("visible");
+  }
+
+  clearInterval(countdown);
+}
 function init() {
-  //initializing values
+
   gameOn = true;
-  memoArry = new Array(18);
-  arry = [];
-  imgAll = [];
-  shuffledBlocks = [];
-  flipArr = [];
   count = 0;
-  flipCounter = 0;
-  var minutes = 0.1;
+  // flipCounter = 0;
+  var minutes = 4;
   var display = document.getElementById("Timer");
 
   the = [
@@ -141,56 +166,38 @@ function init() {
       img: "images/loadingpic122.png",
     },
   ];
-  the = the.sort(() => Math.random() - 0.5);
-  console.log(the);
-  // init();
+
+  for (let i = 0; i < the.length; i++) {
+    skillCard = the.sort(() => Math.random() - 0.5);
+  }
+  console.log(skillCard);
   startTimer(minutes, display);
-
   showTags();
+
+}
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min)) + min;
 }
 
-function showLoss() {
-  const loss = document.getElementById("loss");
-  gameOn = false;
-  if (loss) {
-    document.getElementById("loss").classList.add("visible");
-  }
 
-  clearInterval(countdown);
-}
-
-function showWin() {
-  const win = document.getElementById("win");
-  gameOn = false;
-  if (win) {
-    document.getElementById("win").classList.add("visible");
-  }
-
-  clearInterval(countdown);
-}
 function showTags() {
   console.log("show.....");
   let Str = "";
-  // let Str2 = "";
-  // function Random() {
 
-  //   return the[ Math.floor(Math.random()*9)]
-  // }
-  for (let i = 0; i < the.length; i++) {
-    const element = the[i];
+
+  for (let i = 0; i < skillCard.length; i++) {
+    const element = skillCard[i];
     console.log(element.id);
   }
-  for (let index = 0; index < the.length; index++) {
-    // console.log(Random());
-
-    const element = the[index];
+  for (let index = 0; index < skillCard.length; index++) {
+    const element = skillCard[index];
     console.log(element.Name);
 
     Str += `
     <div  class="w3-col m2  ">
     <div class="box-1-2">
       <div class="_box ">
-        <div id="mask-${index}" class="mask hidden" onclick="toogleMask('mask-${index}')"></div>
+        <div id="${index}" class="mask hidden" onclick="toogleMask('${index}')"></div>
         
             <div class="_box-1  p-box ">
                 <img width="invalid-value" height="invalid-value" alt=""  class="_box-2 _s-box-2" style="object-fit: contain" onclick="checkdual" src="${element.img}">
@@ -205,40 +212,71 @@ function showTags() {
 }
 
 
-
-const checkCouple = () => {
-
-  if (counterClick == 2) {
-    counterClick = 0;
-    const tags = document.querySelectorAll(".mask");
-    
-      for (let index = 0; index < tags.length; index++) {
-        const element = tags[index];
-        if (!element.classList.contains("hidden")) {
-          element.classList.add("hidden");
-        }
-      }
-    
-   
-  } 
-};
-
 function toogleMask(id) {
-  console.log(id);
-
-  checkCouple();
+  
+  if(igNore.includes(skillCard[id].id)) return  ;
+  memoryCard.push(skillCard[id].id);
+  
+  
+  totalOpeningCard.push(skillCard[id].id);
+  // checkDuplicate.push(id);
+  
   counterClick = counterClick + 1;
   document.getElementById(id).classList.toggle("hidden");
+  // console.log(checkDuplicate);
+  // console.log(totalOpenmingCard)
+  // console.log(igNore);s
+  // console.log(totalOpenmingCard.length);
+
 }
 
-// function(arr){
-//   var count = arr.length,temp, inde;
-//   while(count>0){
-//     inde = Math.floor(Math.random()*count);
-//     count --;
-//     temp= arr[count];
-//     arr[count]= arr[inde];
-//     arr[inde]= temp;
-//     return arr;
-//   }
-// }
+
+
+function update(delta) {
+  if (counterClick === 2) {
+    counterClick = 0;
+    if (memoryCard[0] === memoryCard[1] && memoryCard.length === 2) {
+      igNore.push(memoryCard[0]);
+      console.log(igNore);
+      console.log(memoryCard);
+      if (totalOpeningCard.length === CONDITIONWINING) {
+        winning = true;
+        showWin();
+        totalOpeningCard = [];
+      }
+      // if(clickIndex.push(memoryCard)!=clickIndex.push(memoryCard))return toogleMask;
+    }
+    else {
+      setTimeout(() => {
+        const tags = document.querySelectorAll(".mask");
+        totalOpeningCard = [];
+        igNore = [];
+        for (let index = 0; index < tags.length; index++) {
+          const element = tags[index];
+          if (!element.classList.contains("hidden")) {
+            element.classList.add("hidden");
+          }
+        }
+      }, 500);
+    }
+   
+    memoryCard = []; // clear memoryCard
+  }
+}
+
+function confirm() {
+  b();
+  if (winning) {
+    winning = false;
+  }
+
+}
+
+let lastUpdate = Date.now();
+
+(function loop() {
+  const delta = (Date.now() - lastUpdate) / 1000;
+  lastUpdate = Date.now();
+  update(delta);
+  requestAnimationFrame(loop);
+})();
