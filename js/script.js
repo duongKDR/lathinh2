@@ -211,10 +211,16 @@ function toogleMask(id) {
   totalOpeningCard.push(skillCard[id].id);
   document.getElementById(id).classList.toggle("hidden");
   console.log(totalOpeningCard);
+  if (counterClick === 2) {
+  setTimeout(() => {
+    update()
+  }, 500);
+    
+  }
 
 }
 
-function update(delta) {
+function update() {
   if (counterClick === 2) {
     counterClick = 0;
     if (memoryCard[0] === memoryCard[1] && memoryCard.length === 2) {
@@ -258,10 +264,3 @@ function confirm() {
 }
 
 let lastUpdate = Date.now();
-
-(function loop() {
-  const delta = (Date.now() - lastUpdate) / 1000;
-  lastUpdate = Date.now();
-  update(delta);
-  requestAnimationFrame(loop);
-})();
